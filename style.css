@@ -1,0 +1,181 @@
+/* ============================================
+   校园打卡指南 - 样式表
+   使用 CSS 变量管理主题色，便于维护
+   ============================================ */
+
+/* ---------- CSS 变量 ---------- */
+:root {
+  --color-primary: #2563eb;        /* 主色：蓝色 */
+  --color-primary-dark: #1d4ed8;   /* 主色加深 */
+  --color-bg: #f8fafc;             /* 页面背景 */
+  --color-surface: #ffffff;        /* 卡片背景 */
+  --color-text: #1e293b;           /* 主文字 */
+  --color-text-secondary: #64748b; /* 次要文字 */
+  --color-border: #e2e8f0;         /* 边框 */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius: 12px;                  /* 圆角 */
+  --transition: 0.3s ease;         /* 统一过渡 */
+  --container-max: 960px;          /* 内容最大宽度 */
+}
+
+/* ---------- 全局重置与基础 ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;         /* 平滑滚动 */
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+/* ---------- 布局容器 ---------- */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------- 头部 ---------- */
+.site-header {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #fff;
+}
+
+.site-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.site-intro {
+  font-size: 1rem;
+  opacity: 0.9;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ---------- 主体 ---------- */
+.site-main {
+  padding: 2rem 0 3rem;
+}
+
+/* 卡片网格：桌面端 3 列 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+  will-change: transform, box-shadow;
+}
+
+/* 卡片悬停：阴影加深 + 微缩放 */
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 卡片图标（Emoji） */
+.card-icon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+/* 卡片标题 */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+/* 卡片描述 */
+.card-desc {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.footer-text {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- 滚动动画初始态 ---------- */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- 响应式：平板 2 列 ---------- */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .site-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* ---------- 响应式：移动端单列 ---------- */
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .site-header {
+    padding: 2.5rem 1rem 1.5rem;
+  }
+
+  .site-title {
+    font-size: 1.5rem;
+  }
+
+  .card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+  }
+}
