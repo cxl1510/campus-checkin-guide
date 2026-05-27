@@ -12,6 +12,7 @@
   --color-text: #1e293b;           /* 主文字 */
   --color-text-secondary: #64748b; /* 次要文字 */
   --color-border: #e2e8f0;         /* 边框 */
+  --color-like: #ef4444;           /* 点赞红色 */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -47,10 +48,22 @@ body {
 
 /* ---------- 头部 ---------- */
 .site-header {
+  position: relative;
   text-align: center;
   padding: 3rem 1rem 2rem;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: #fff;
+  overflow: hidden;
+}
+
+/* 视差滚动背景层 */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  z-index: -1;
+  will-change: transform;
 }
 
 .site-title {
@@ -72,7 +85,98 @@ body {
   padding: 2rem 0 3rem;
 }
 
-/* 卡片网格：桌面端 3 列 */
+/* ---------- 筛选栏 ---------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-categories {
+  flex: 1 1 auto;
+}
+
+.filter-controls {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+
+/* 分类按钮 */
+.filter-btn {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: color var(--transition), background-color var(--transition), border-color var(--transition);
+}
+
+.filter-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.filter-btn.is-active {
+  color: #fff;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* 搜索框 */
+.search-input {
+  width: 180px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15);
+}
+
+/* 排序下拉框 */
+.sort-select {
+  padding: 0.45rem 1.75rem 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.sort-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15);
+}
+
+/* ---------- 卡片网格 ---------- */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -81,35 +185,67 @@ body {
 
 /* ---------- 卡片 ---------- */
 .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 1.75rem 1.5rem;
-  text-align: center;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition);
   will-change: transform, box-shadow;
+  cursor: pointer;
 }
 
-/* 卡片悬停：阴影加深 + 微缩放 */
 .card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow: var(--shadow-lg);
 }
 
+/* 卡片图片 */
+.card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* 卡片内容区 */
+.card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+  text-align: center;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
 /* 卡片图标（Emoji） */
 .card-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   line-height: 1;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 /* 卡片标题 */
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: var(--color-text);
+}
+
+/* 卡片分类标签 */
+.card-category {
+  display: inline-block;
+  align-self: center;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  background-color: rgb(37 99 235 / 0.08);
+  border-radius: 9999px;
 }
 
 /* 卡片描述 */
@@ -117,6 +253,55 @@ body {
   font-size: 0.95rem;
   color: var(--color-text-secondary);
   line-height: 1.7;
+  flex: 1 1 auto;
+}
+
+/* 卡片点赞 */
+.card-like {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  cursor: pointer;
+  align-self: center;
+  transition: color var(--transition), border-color var(--transition), background-color var(--transition);
+}
+
+.card-like:hover {
+  color: var(--color-like);
+  border-color: var(--color-like);
+  background-color: rgb(239 68 68 / 0.06);
+}
+
+.card-like.is-liked {
+  color: var(--color-like);
+  border-color: var(--color-like);
+  background-color: rgb(239 68 68 / 0.08);
+}
+
+.like-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ---------- 无结果提示 ---------- */
+.no-results {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.no-results[hidden] {
+  display: none;
 }
 
 /* ---------- 页脚 ---------- */
@@ -130,6 +315,167 @@ body {
 .footer-text {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
+}
+
+/* ---------- 弹窗 ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgb(0 0 0 / 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px);
+  transition: transform var(--transition);
+}
+
+.modal-overlay.is-open .modal-content {
+  transform: translateY(0);
+}
+
+/* 弹窗关闭按钮 */
+.modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #fff;
+  background-color: rgb(0 0 0 / 0.35);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.modal-close:hover {
+  background-color: rgb(0 0 0 / 0.55);
+}
+
+/* 弹窗图片 */
+.modal-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* 弹窗信息区 */
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.modal-category {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  background-color: rgb(37 99 235 / 0.08);
+  border-radius: 9999px;
+}
+
+.modal-desc {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+/* 弹窗小贴士 */
+.modal-tips {
+  margin-bottom: 1.25rem;
+}
+
+.modal-tips h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.modal-tips ul {
+  list-style: disc inside;
+  padding-left: 0.25rem;
+}
+
+.modal-tips li {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+
+/* 弹窗点赞按钮 */
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background-color var(--transition), transform var(--transition);
+}
+
+.like-btn:hover {
+  color: var(--color-like);
+  border-color: var(--color-like);
+  background-color: rgb(239 68 68 / 0.06);
+  transform: scale(1.05);
+}
+
+.like-btn.is-liked {
+  color: var(--color-like);
+  border-color: var(--color-like);
+  background-color: rgb(239 68 68 / 0.08);
+}
+
+.like-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.like-count {
+  font-weight: 600;
 }
 
 /* ---------- 滚动动画初始态 ---------- */
@@ -154,6 +500,20 @@ body {
   .site-title {
     font-size: 1.75rem;
   }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-controls {
+    justify-content: flex-start;
+  }
+
+  .search-input {
+    flex: 1 1 auto;
+    width: auto;
+  }
 }
 
 /* ---------- 响应式：移动端单列 ---------- */
@@ -171,11 +531,24 @@ body {
     font-size: 1.5rem;
   }
 
-  .card {
-    padding: 1.5rem 1.25rem;
+  .modal-overlay {
+    padding: 0.5rem;
   }
 
-  .card-icon {
-    font-size: 2.5rem;
+  .modal-content {
+    max-height: calc(100vh - 1rem);
+    border-radius: calc(var(--radius) - 4px);
+  }
+
+  .modal-image {
+    height: 180px;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
   }
 }
