@@ -494,7 +494,7 @@
     if (!siteHeader) return;
     const scrollY = window.scrollY || window.pageYOffset;
     const offset = scrollY * 0.3;
-    siteHeader.style.backgroundPosition = `center ${offset}px`;
+    siteHeader.style.setProperty('--parallax-offset', `${offset}px`);
   }
 
   // 使用 requestAnimationFrame 节流
