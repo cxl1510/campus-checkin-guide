@@ -60,10 +60,11 @@ body {
 .site-header::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -20%;
   background: inherit;
   z-index: -1;
   will-change: transform;
+  transform: translateY(var(--parallax-offset, 0));
 }
 
 .site-title {
